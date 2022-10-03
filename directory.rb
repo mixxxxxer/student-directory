@@ -22,6 +22,16 @@ def input_student
   end
 end
 
+def save_students
+  file = File.open("students.csv", "w")
+  @students.each do |student|
+    student_data = [student[:name], student[:date], student[:cohort]]
+    csv_line = student_data.join(",")
+    file.puts csv_line
+  end
+  file.close
+end
+
 def print_header
   puts "The students of Villains Academy"
   puts "-------------"
@@ -55,6 +65,7 @@ def print_menu
   puts "Choose command:"
   puts "1. Input the students"
   puts "2. Show the students"
+  puts "3. Save the list to students.csv"
   puts "0. Exit"
 end
 
@@ -62,6 +73,7 @@ def user_decision(answer)
   case answer
     when "1" then input_student
     when "2" then show_students
+    when "3" then save_students
     when "0" then exit
   else
     puts "Wrong answer"
