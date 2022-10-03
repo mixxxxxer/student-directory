@@ -43,18 +43,38 @@ def print_header
 end
 
 def print_array(student_list)
-  student_list.each_with_index { |student, id| 
+  if !student_list.empty?
+    student_list.each_with_index do |student, id| 
     #if student[:name].length >= 12 // print only students, whose name longer then 12
     #if student[:name][0].downcase == "a" // print students, whose name starts from "a"
     puts "#{id + 1}.#{student[:name].ljust(30)} #{student[:date].ljust(10)} #{("(" + student[:cohort]).rjust(15)} cohort)" 
-  }
+    end
+  end
 end
 
 def print_footer(student_list)
   puts "Overall, we have #{student_list.size} great students"
 end
 
-print_header
-students = input_student
-print_array(students)
-print_footer(students)
+def interactive_menu
+  students = []
+  loop do
+    puts "Choose command:"
+    puts "1. Input the students"
+    puts "2. Show the students"
+    puts "0. Exit"
+    command = gets.chomp
+    case command
+      when "1" then students = input_student
+      when "2" 
+        print_header
+        print_array(students)
+        print_footer(students)
+      when "0" then exit
+    else
+        puts "Wrong answer"
+    end
+  end
+end
+
+interactive_menu
