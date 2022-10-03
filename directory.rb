@@ -1,20 +1,6 @@
-=begin
-students = [
-  { name: "Dr. Hannibal Lecter", cohort: :november },
-  { name: "Darth Vader", cohort: :november },
-  { name: "Nurse Ratched", cohort: :november },
-  { name: "Michael Corleone", cohort: :november },
-  { name: "Alex DeLarge", cohort: :november },
-  { name: "The Wicked Witch of the West", cohort: :november },
-  { name: "Terminator", cohort: :november },
-  { name: "Freddy Krueger", cohort: :november },
-  { name: "The Joker", cohort: :november },
-  { name: "Joffrey Baratheon", cohort: :november },
-  { name: "Norman Bates", cohort: :november }
-  ]
-=end
+@students = []
+
 def input_student
-  students = []
   puts "Please, add name"
   puts "Enter twice instead of a name, if you finish."
   name = gets.chomp
@@ -23,8 +9,8 @@ def input_student
   puts "Please, cohort"
   cohort = gets.chomp
   while !name.empty? do
-    students << {name: name, date: date, cohort: cohort}
-    puts "Now we have #{students.count} students"
+    @students << {name: name, date: date, cohort: cohort}
+    puts "Now we have #{@students.count} students"
     puts "Please, add name"
     name = gets.chomp
     if !name.empty? 
@@ -34,7 +20,6 @@ def input_student
       cohort = gets.chomp
     end
   end
-  students
 end
 
 def print_header
@@ -42,9 +27,9 @@ def print_header
   puts "-------------"
 end
 
-def print_array(student_list)
-  if !student_list.empty?
-    student_list.each_with_index do |student, id| 
+def print_array
+  if !@students.empty?
+    @students.each_with_index do |student, id| 
     #if student[:name].length >= 12 // print only students, whose name longer then 12
     #if student[:name][0].downcase == "a" // print students, whose name starts from "a"
     puts "#{id + 1}.#{student[:name].ljust(30)} #{student[:date].ljust(10)} #{("(" + student[:cohort]).rjust(15)} cohort)" 
@@ -52,28 +37,41 @@ def print_array(student_list)
   end
 end
 
-def print_footer(student_list)
-  puts "Overall, we have #{student_list.size} great students"
+def print_footer
+  if @students.empty? 
+    puts "Oh, we haven`t students(((" 
+  else
+    puts "Overall, we have #{@students.size} great students"
+  end
+end
+
+def show_students
+  print_header
+  print_array
+  print_footer
+end
+
+def print_menu
+  puts "Choose command:"
+  puts "1. Input the students"
+  puts "2. Show the students"
+  puts "0. Exit"
+end
+
+def user_decision(answer)
+  case answer
+    when "1" then input_student
+    when "2" then show_students
+    when "0" then exit
+  else
+    puts "Wrong answer"
+  end
 end
 
 def interactive_menu
-  students = []
   loop do
-    puts "Choose command:"
-    puts "1. Input the students"
-    puts "2. Show the students"
-    puts "0. Exit"
-    command = gets.chomp
-    case command
-      when "1" then students = input_student
-      when "2" 
-        print_header
-        print_array(students)
-        print_footer(students)
-      when "0" then exit
-    else
-        puts "Wrong answer"
-    end
+    print_menu
+    user_decision(gets.chomp)
   end
 end
 
