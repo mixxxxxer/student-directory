@@ -3,21 +3,21 @@
 def input_student
   puts "Please, add name"
   puts "Enter twice instead of a name, if you finish."
-  name = gets.chomp
+  name = STDIN.gets.chomp
   puts "Please, add date of birthday (11.11.1111)"
-  date = gets.chomp
+  date = STDIN.gets.chomp
   puts "Please, cohort"
-  cohort = gets.chomp
+  cohort = STDIN.gets.chomp
   while !name.empty? do
     @students << {name: name, date: date, cohort: cohort}
     puts "Now we have #{@students.count} students"
     puts "Please, add name"
-    name = gets.chomp
+    name = STDIN.gets.chomp
     if !name.empty? 
       puts "Please, add date of birthday (11.11.1111)"
-      date = gets.chomp
+      date = STDIN.gets.chomp
       puts "Please, cohort"
-      cohort = gets.chomp
+      cohort = STDIN.gets.chomp
     end
   end
 end
@@ -32,8 +32,20 @@ def save_students
   file.close
 end
 
-def load_students
-  file = File.open("students.csv", "r")
+def try_load_students
+  filename = ARGV.first
+  return if filename.nil?
+  if File.exist?(filename)
+    load_students(filename)
+     puts "Loaded #{@students.count} from #{filename}"
+  else
+    puts "Sorry, #{filename} doesn't exist."
+    exit
+  end
+end
+
+def load_students(filename = "students.csv")
+  file = File.open(filename, "r")
   file.readlines.each do |line|
   name, date, cohort = line.chomp.split(',')
     @students << {name: name, date: date, cohort: cohort.to_sym}
@@ -94,8 +106,9 @@ end
 def interactive_menu
   loop do
     print_menu
-    user_decision(gets.chomp)
+    user_decision(STDIN.gets.chomp)
   end
 end
 
+try_load_students
 interactive_menu
